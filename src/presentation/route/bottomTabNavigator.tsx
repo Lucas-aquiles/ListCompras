@@ -1,19 +1,48 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, {useState, useEffect} from 'react';
+
 import {HomeScreen} from '../screen/homeScreen';
 import {SettingScreen} from '../screen/settingScreen';
 import {ListScreen} from '../screen/listScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {globalColors} from '../theme/theme';
+import {Keyboard, useWindowDimensions} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 export const BottomTabNavigator = () => {
+  const dimensions = useWindowDimensions();
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // Ocultar barra de navegación cuando el teclado aparece
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // Mostrar barra de navegación cuando el teclado se oculta
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
     <Tab.Navigator
       sceneContainerStyle={{
         backgroundColor: 'while',
       }}
       screenOptions={{
-        tabBarActiveTintColor: 'while',
+        headerShown: false,
+        tabBarActiveTintColor: globalColors.textprimary,
+        tabBarInactiveTintColor: globalColors.secondary,
         tabBarLabelStyle: {
           marginBottom: 5,
         },
@@ -25,14 +54,14 @@ export const BottomTabNavigator = () => {
         tabBarStyle: {
           borderTopWidth: 0,
           elevation: 0,
-          height: 80,
+          height: isKeyboardVisible ? 0 : 80, // Oculta la barra cuando el teclado está visible
         },
       }}>
       <Tab.Screen
         name="Home"
         options={{
           tabBarIcon: ({color}) => (
-            <Icon name="home-outline" size={50} color="#900" />
+            <Icon name="home-outline" size={50} color={color} />
           ),
         }}
         component={HomeScreen}
@@ -41,7 +70,7 @@ export const BottomTabNavigator = () => {
         name="ListScreen"
         options={{
           tabBarIcon: ({color}) => (
-            <Icon name="list-outline" size={50} color="#900" />
+            <Icon name="list-outline" size={50} color={color} />
           ),
         }}
         component={ListScreen}
@@ -51,7 +80,7 @@ export const BottomTabNavigator = () => {
         name="Settings"
         options={{
           tabBarIcon: ({color}) => (
-            <Icon name="settings-outline" size={50} color="#900" />
+            <Icon name="settings-outline" size={50} color={color} />
           ),
         }}
         component={SettingScreen}
