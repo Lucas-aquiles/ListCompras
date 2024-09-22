@@ -11,10 +11,10 @@ import {
   Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 import {globalColors} from '../theme/theme';
+import {ShareInfo} from '../components/shareInformation/shareInfo';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-// Definir el tipo de producto
 interface Product {
   name: string;
   quantity: number;
@@ -40,13 +40,12 @@ export const ListScreen = () => {
   });
 
   const [products, setProducts] = useState<Product[]>([]);
-  console.log('aaaaa', products);
+  const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
   const [invisibiliti, setInvisibiliti] = useState(false);
 
   const [editPro, setEditPro] = useState({index: 0, name: ''});
 
-  console.log(products.length);
   const addProduct = () => {
     const {name, quantity, weight, price} = product;
     if (name && quantity >= 0 && weight >= 0 && price >= 0) {
@@ -87,7 +86,6 @@ export const ListScreen = () => {
   const ActualizationProduct = (index: number) => {
     const nuevoObjeto = {};
     productAux;
-    console.log(productAux, index);
     let articulo = products[index];
 
     const objeto3 = {...articulo};
@@ -123,30 +121,20 @@ export const ListScreen = () => {
     setProducts(newArray);
     setModal(false);
   };
+  function calcularTotalCarrito() {
+    // Inicializamos una variable para almacenar el total
+    let total = 0;
 
-  const resultado = 10;
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message: `El resultado de la suma es: ${resultado}`,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // Compartido con alguna actividad específica
-          console.log('Compartido con', result.activityType);
-        } else {
-          // Compartido directamente
-          console.log('Compartido');
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // El diálogo de compartir fue cerrado
-        console.log('Compartir cancelado');
-      }
-    } catch (error) {
-      console.log('Error al compartir:');
-    }
-  };
+    // Iteramos sobre cada elemento (producto) del carrito
+    products.forEach(producto => {
+      // Calculamos el subtotal del producto (cantidad * precio)
+      const subtotal = producto.quantity * producto.price;
 
+      // Sumamos el subtotal al total general
+      total += subtotal;
+    });
+    setTotal(total);
+  }
   return (
     <View style={styles.container}>
       <Pressable
@@ -339,7 +327,52 @@ export const ListScreen = () => {
           </View>
         )}
       />
-      <Button onPress={onShare} title="Compartir resultado" />
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+        <Pressable
+          style={({pressed}) => ({
+            backgroundColor: pressed ? '#887f7f' : 'white', // Cambia de color si está presionado
+            width: 50,
+            borderRadius: 20,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 30,
+          })}
+          onPress={calcularTotalCarrito}>
+          <Icon name="bag-add-outline" size={30} color={Colors.secondary} />
+        </Pressable>
+      </View>
+
+      <View
+        style={{
+          backgroundColor: 'white',
+          height: 60,
+          alignContent: 'center',
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          borderRadius: 20,
+          paddingHorizontal: width * 0.04,
+        }}>
+        <ShareInfo total={total} />
+
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            height: 'auto',
+          }}>
+          <Text style={{fontSize: 30, alignSelf: 'center'}}>Total :</Text>
+          <Text style={{alignSelf: 'center', fontSize: 20}}> $ </Text>
+          <Text style={{alignSelf: 'center', fontSize: 40}}>{total}</Text>
+        </View>
+      </View>
     </View>
   );
 };

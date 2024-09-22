@@ -4,12 +4,9 @@ export const globalColors = {
   primary: '#9CB783',
   secondary: '#9CB783',
   tertiary: '#E2F0CB',
-  success: '#4cc9f0',
-  warning: '#fca311',
-  danger: '#e71d36',
   dark: '#22223b',
   background: '#fff',
-  textprimary: '#096f26',
+  textprimary: '#6d706e',
 };
 
 export const globalStyles = StyleSheet.create({

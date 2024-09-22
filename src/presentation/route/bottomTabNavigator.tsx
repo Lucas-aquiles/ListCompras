@@ -18,13 +18,13 @@ export const BottomTabNavigator = () => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        setKeyboardVisible(true); // Ocultar barra de navegación cuando el teclado aparece
+        setKeyboardVisible(true);
       },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        setKeyboardVisible(false); // Mostrar barra de navegación cuando el teclado se oculta
+        setKeyboardVisible(false);
       },
     );
 
