@@ -7,7 +7,10 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
+  Button,
+  Share,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {globalColors} from '../theme/theme';
 
@@ -22,7 +25,6 @@ interface Product {
 const {width, height} = Dimensions.get('window'); // Obtener dimensiones de la pantalla
 
 export const ListScreen = () => {
-  // Estado para los campos de un producto
   const [product, setProduct] = useState<Product>({
     name: '',
     quantity: 0,
@@ -30,19 +32,34 @@ export const ListScreen = () => {
     price: 0,
   });
 
-  // Estado para almacenar los productos cargados (arreglo de Product)
-  const [products, setProducts] = useState<Product[]>([]);
-  console.log(products);
+  const [productAux, setProductAux] = useState<Product>({
+    name: '',
+    quantity: 0,
+    weight: 0,
+    price: 0,
+  });
 
-  // Función para agregar un producto
+  const [products, setProducts] = useState<Product[]>([]);
+  console.log('aaaaa', products);
+  const [modal, setModal] = useState(false);
+  const [invisibiliti, setInvisibiliti] = useState(false);
+
+  const [editPro, setEditPro] = useState({index: 0, name: ''});
+
+  console.log(products.length);
   const addProduct = () => {
     const {name, quantity, weight, price} = product;
     if (name && quantity >= 0 && weight >= 0 && price >= 0) {
-      // Agregar el producto al array de productos
       setProducts([...products, product]);
-      // Limpiar los campos del producto
       setProduct({name: '', quantity: 0, weight: 0, price: 0});
     }
+  };
+
+  const editProduct = (index: number, newName: string): void => {
+    setModal(!modal);
+    setEditPro({index, name: newName}); // Pasa un objeto con las propiedades 'index' y 'name'
+    handleInputChangeAux('name', newName);
+    // Your existing editProduct logic here
   };
 
   const handleInputChange = (key: keyof Product, value: string) => {
@@ -56,68 +73,216 @@ export const ListScreen = () => {
     }
   };
 
+  const handleInputChangeAux = (key: keyof Product, value: string) => {
+    if (key === 'name') {
+      setProductAux({...productAux, [key]: value}); // Si es el nombre, guardar como string
+    } else {
+      const numericValue = Number(value);
+      if (!isNaN(numericValue)) {
+        setProductAux({...productAux, [key]: numericValue}); // Para los otros campos, guardarlo como número
+      }
+    }
+  };
+
+  const ActualizationProduct = (index: number) => {
+    const nuevoObjeto = {};
+    productAux;
+    console.log(productAux, index);
+    let articulo = products[index];
+
+    const objeto3 = {...articulo};
+
+    if (productAux.price !== 0) {
+      objeto3.price = productAux.price;
+    }
+    if (productAux.quantity !== 0) {
+      objeto3.quantity = productAux.quantity;
+    }
+    if (productAux.weight !== 0) {
+      objeto3.weight = productAux.weight;
+    }
+
+    setProducts(prevProducts => {
+      const updatedProducts = [...prevProducts]; // Create a copy
+      updatedProducts[index] = objeto3;
+      return updatedProducts;
+    });
+
+    setProductAux({
+      name: '',
+      quantity: 0,
+      weight: 0,
+      price: 0,
+    });
+    setEditPro({index: 0, name: ''});
+    setModal(false);
+  };
+
+  const DeleteProduct = (index: number) => {
+    const newArray = products.filter((_, i) => i !== index);
+    setProducts(newArray);
+    setModal(false);
+  };
+
+  const resultado = 10;
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `El resultado de la suma es: ${resultado}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Compartido con alguna actividad específica
+          console.log('Compartido con', result.activityType);
+        } else {
+          // Compartido directamente
+          console.log('Compartido');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // El diálogo de compartir fue cerrado
+        console.log('Compartir cancelado');
+      }
+    } catch (error) {
+      console.log('Error al compartir:');
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Cargar Producto</Text>
-
-      {/* Input para Nombre */}
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre del producto"
-        value={product.name}
-        onChangeText={text => handleInputChange('name', text)}
-      />
-
-      {/* Input para Cantidad */}
-      <TextInput
-        style={styles.input}
-        placeholder="Cantidad"
-        value={product.quantity === 0 ? '' : `${product.quantity}`}
-        onChangeText={text => handleInputChange('quantity', text)}
-        keyboardType="numeric"
-      />
-
-      {/* Input para Peso */}
-      <TextInput
-        style={styles.input}
-        placeholder="Peso (kg)"
-        value={product.weight === 0 ? '' : `${product.weight}`}
-        onChangeText={text => handleInputChange('weight', text)}
-        keyboardType="numeric"
-      />
-
-      {/* Input para Precio */}
-      <TextInput
-        style={styles.input}
-        placeholder="Precio"
-        value={product.price === 0 ? '' : `${product.price}`}
-        onChangeText={text => handleInputChange('price', text)}
-        keyboardType="numeric"
-      />
-
-      {/* Botón para agregar el producto */}
-
       <Pressable
-        onPress={addProduct}
         style={{
-          backgroundColor: '#096f26',
-          height: 40,
-          borderRadius: 20,
-        }}>
-        <Text
-          style={{
-            color: 'white',
-            textAlign: 'center',
-            fontWeight: '600',
-            marginVertical: 'auto',
-            fontSize: 25,
-          }}>
-          {'Agregar Producto'}
-        </Text>
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 25,
+        }}
+        onPress={() => setInvisibiliti(!invisibiliti)}>
+        <Text style={styles.title}>Cargar Producto</Text>
+        {!invisibiliti && (
+          <Icon name="caret-down-outline" size={20} color={'white'} />
+        )}
+        {invisibiliti && (
+          <Icon name="caret-up-outline" size={20} color={'white'} />
+        )}
       </Pressable>
+      {invisibiliti && (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Producto"
+            value={product.name}
+            onChangeText={text => handleInputChange('name', text)}
+          />
 
-      <Text style={[styles.title, {marginTop: 30}]}>Productos cargados: </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Cantidad"
+            value={product.quantity === 0 ? '' : `${product.quantity}`}
+            onChangeText={text => handleInputChange('quantity', text)}
+            keyboardType="numeric"
+          />
 
+          <TextInput
+            style={styles.input}
+            placeholder="Peso (kg)"
+            value={product.weight === 0 ? '' : `${product.weight}`}
+            onChangeText={text => handleInputChange('weight', text)}
+            keyboardType="numeric"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Precio"
+            value={product.price === 0 ? '' : `${product.price}`}
+            onChangeText={text => handleInputChange('price', text)}
+            keyboardType="numeric"
+          />
+
+          <Pressable
+            onPress={addProduct}
+            style={{
+              marginHorizontal: 'auto',
+            }}>
+            <Icon name="add-circle-sharp" size={width * 0.12} color={'white'} />
+          </Pressable>
+        </View>
+      )}
+      {products.length !== 0 && (
+        <Text style={[styles.title, {marginTop: 30}]}>
+          Productos cargados :
+        </Text>
+      )}
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* ---------------------------------------------------------------------------------- */}
+      {modal && (
+        <View
+          style={{
+            backgroundColor: 'white',
+            width: width * 0.9,
+            height: 'auto',
+            borderRadius: 20,
+          }}>
+          <Text style={{marginLeft: 20, marginVertical: 10}}>
+            {' '}
+            Producto: {editPro.name.toUpperCase()}
+          </Text>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}>
+            <TextInput
+              style={styles.input1}
+              placeholder="Cantidad"
+              placeholderTextColor="white"
+              keyboardType="numeric"
+              value={productAux.quantity === 0 ? '' : `${productAux.quantity}`}
+              onChangeText={text => handleInputChangeAux('quantity', text)}
+            />
+            <TextInput
+              style={styles.input1}
+              placeholder="Peso"
+              placeholderTextColor="white"
+              keyboardType="numeric"
+              value={productAux.weight === 0 ? '' : `${productAux.weight}`}
+              onChangeText={text => handleInputChangeAux('weight', text)}
+            />
+            <TextInput
+              style={styles.input1}
+              placeholder="Precio"
+              placeholderTextColor="white"
+              keyboardType="numeric"
+              value={productAux.price === 0 ? '' : `${productAux.price}`}
+              onChangeText={text => handleInputChangeAux('price', text)}
+            />
+          </View>
+
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              marginHorizontal: 'auto',
+              width: width * 0.2,
+              justifyContent: 'space-between',
+              marginVertical: 10,
+            }}>
+            <Pressable
+              onPress={() => {
+                ActualizationProduct(editPro.index);
+              }}>
+              <Icon name="checkmark-sharp" size={30} color={'#66e466'} />
+            </Pressable>
+
+            <Pressable
+              onPress={() => {
+                DeleteProduct(editPro.index);
+              }}>
+              <Icon name="trash-outline" size={30} color={'red'} />
+            </Pressable>
+          </View>
+        </View>
+      )}
       {/* Lista de productos */}
       <FlatList
         data={products}
@@ -164,9 +329,17 @@ export const ListScreen = () => {
               }}>
               ${item.price}
             </Text>
+
+            <Pressable
+              onPress={() => {
+                editProduct(index, item.name);
+              }}>
+              <Icon name="create-outline" size={20} color={'#0b280b'} />
+            </Pressable>
           </View>
         )}
       />
+      <Button onPress={onShare} title="Compartir resultado" />
     </View>
   );
 };
@@ -180,8 +353,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#042804',
+    color: 'white',
   },
   input: {
     borderWidth: 0,
@@ -190,6 +362,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: globalColors.background,
   },
+  input1: {
+    borderWidth: 0,
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 20,
+    width: width * 0.2,
+    backgroundColor: 'gray',
+  },
+
   productItem: {
     flexDirection: 'row',
     padding: 10,
