@@ -1,12 +1,11 @@
 import React from 'react';
-import {View, Text, Image, StatusBar, useWindowDimensions} from 'react-native';
+import {View, Text, Image, StatusBar, Dimensions} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalColors} from '../theme/theme';
 
 export const HomeScreen = () => {
-  const dimensions = useWindowDimensions();
-  const {height, width} = dimensions;
+  const {width, height} = Dimensions.get('window'); // Obtener dimensiones de la pantalla
 
   return (
     <View style={{backgroundColor: globalColors.primary, flex: 1}}>
@@ -17,17 +16,17 @@ export const HomeScreen = () => {
 
       <Text
         style={{
-          fontSize: 50,
+          fontSize: width * 0.16,
           textAlign: 'center',
           fontWeight: '800',
           color: 'white',
-          marginTop: 150,
+          marginTop: height * 0.05,
         }}>
         Tus Mandados
       </Text>
       <Image
         source={require('../../assets/images/lista1.png')}
-        style={{width: '100%', height: height * 0.3, marginTop: 50}}
+        style={{width: '100%', height: height * 0.3, marginTop: height * 0.04}}
       />
     </View>
   );

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 export const globalColors = {
   primary: '#9CB783',
@@ -8,6 +8,7 @@ export const globalColors = {
   background: '#fff',
   textprimary: '#6d706e',
 };
+const {width, height} = Dimensions.get('window'); // Obtener dimensiones de la pantalla
 
 export const globalStyles = StyleSheet.create({
   container: {

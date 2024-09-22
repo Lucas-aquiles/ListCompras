@@ -142,7 +142,7 @@ export const ListScreen = () => {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          marginBottom: 25,
+          marginBottom: height * 0.02,
         }}
         onPress={() => setInvisibiliti(!invisibiliti)}>
         <Text style={styles.title}>Cargar Producto</Text>
@@ -196,7 +196,7 @@ export const ListScreen = () => {
         </View>
       )}
       {products.length !== 0 && (
-        <Text style={[styles.title, {marginTop: 30}]}>
+        <Text style={[styles.title, {marginTop: width * 0.05}]}>
           Productos cargados :
         </Text>
       )}
@@ -210,7 +210,8 @@ export const ListScreen = () => {
             height: 'auto',
             borderRadius: 20,
           }}>
-          <Text style={{marginLeft: 20, marginVertical: 10}}>
+          <Text
+            style={{marginLeft: width * 0.05, marginVertical: height * 0.01}}>
             {' '}
             Producto: {editPro.name.toUpperCase()}
           </Text>
@@ -251,22 +252,26 @@ export const ListScreen = () => {
               display: 'flex',
               flexDirection: 'row',
               marginHorizontal: 'auto',
-              width: width * 0.2,
+              width: width * 0.3,
               justifyContent: 'space-between',
-              marginVertical: 10,
+              marginVertical: height * 0.01,
             }}>
             <Pressable
               onPress={() => {
                 ActualizationProduct(editPro.index);
               }}>
-              <Icon name="checkmark-sharp" size={30} color={'#66e466'} />
+              <Icon
+                name="checkmark-sharp"
+                size={width * 0.09}
+                color={'#66e466'}
+              />
             </Pressable>
 
             <Pressable
               onPress={() => {
                 DeleteProduct(editPro.index);
               }}>
-              <Icon name="trash-outline" size={30} color={'red'} />
+              <Icon name="trash-outline" size={width * 0.09} color={'red'} />
             </Pressable>
           </View>
         </View>
@@ -280,7 +285,7 @@ export const ListScreen = () => {
             <Text
               style={{
                 color: 'white',
-                width: width * 0.07,
+                width: width * 0.06,
                 fontWeight: '600',
               }}>
               {index + 1} -
@@ -288,14 +293,16 @@ export const ListScreen = () => {
             <Text
               style={{
                 color: 'white',
-                width: width * 0.24,
+                width: width * 0.22,
+                fontSize: width * 0.035,
                 fontWeight: '600',
+                marginVertical: 'auto',
               }}>
               {item.name.toUpperCase()}
             </Text>
             <Text
               style={{
-                width: width * 0.175,
+                width: width * 0.11,
                 color: 'white',
                 fontWeight: '600',
               }}>
@@ -304,7 +311,7 @@ export const ListScreen = () => {
             <Text
               style={{
                 color: 'white',
-                width: width * 0.175,
+                width: width * 0.16,
                 fontWeight: '600',
               }}>
               {item.weight}kg
@@ -312,7 +319,7 @@ export const ListScreen = () => {
             <Text
               style={{
                 color: 'white',
-                width: width * 0.175,
+                width: width * 0.15,
                 fontWeight: '600',
               }}>
               ${item.price}
@@ -322,36 +329,41 @@ export const ListScreen = () => {
               onPress={() => {
                 editProduct(index, item.name);
               }}>
-              <Icon name="create-outline" size={20} color={'#0b280b'} />
+              <Icon name="create-outline" size={19} color={'#0b280b'} />
             </Pressable>
           </View>
         )}
       />
-
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-        }}>
-        <Pressable
-          style={({pressed}) => ({
-            backgroundColor: pressed ? '#887f7f' : 'white', // Cambia de color si está presionado
-            width: 50,
-            borderRadius: 20,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 30,
-          })}
-          onPress={calcularTotalCarrito}>
-          <Icon name="bag-add-outline" size={30} color={Colors.secondary} />
-        </Pressable>
-      </View>
+      {products.length !== 0 && (
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+          }}>
+          <Pressable
+            style={({pressed}) => ({
+              backgroundColor: pressed ? '#887f7f' : 'white', // Cambia de color si está presionado
+              width: width * 0.15,
+              borderRadius: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: width * 0.05,
+            })}
+            onPress={calcularTotalCarrito}>
+            <Icon
+              name="bag-add-outline"
+              size={width * 0.07}
+              color={Colors.secondary}
+            />
+          </Pressable>
+        </View>
+      )}
 
       <View
         style={{
           backgroundColor: 'white',
-          height: 60,
+          height: height * 0.1,
           alignContent: 'center',
           alignItems: 'center',
           display: 'flex',
@@ -368,9 +380,13 @@ export const ListScreen = () => {
             flexDirection: 'row',
             height: 'auto',
           }}>
-          <Text style={{fontSize: 30, alignSelf: 'center'}}>Total :</Text>
-          <Text style={{alignSelf: 'center', fontSize: 20}}> $ </Text>
-          <Text style={{alignSelf: 'center', fontSize: 40}}>{total}</Text>
+          <Text style={{fontSize: width * 0.05, alignSelf: 'center'}}>
+            Total :
+          </Text>
+          <Text style={{alignSelf: 'center', fontSize: width * 0.03}}> $ </Text>
+          <Text style={{alignSelf: 'center', fontSize: width * 0.09}}>
+            {total}
+          </Text>
         </View>
       </View>
     </View>
@@ -384,21 +400,22 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
     color: 'white',
   },
   input: {
     borderWidth: 0,
-    padding: 10,
-    marginBottom: 10,
+    paddingVertical: width * 0.004,
+    paddingHorizontal: width * 0.02,
+    marginBottom: height * 0.009,
     borderRadius: 20,
     backgroundColor: globalColors.background,
   },
   input1: {
     borderWidth: 0,
-    padding: 10,
-    marginBottom: 10,
+    padding: width * 0.01,
+    marginBottom: height * 0.009,
     borderRadius: 20,
     width: width * 0.2,
     backgroundColor: 'gray',
@@ -406,11 +423,11 @@ const styles = StyleSheet.create({
 
   productItem: {
     flexDirection: 'row',
-    padding: 10,
+    padding: width * 0.004,
     borderBottomWidth: 1,
     borderColor: 'white',
-    marginBottom: 10,
-    width: width * 0.9,
+    marginBottom: width * 0.004,
+    width: width * 0.85,
     justifyContent: 'space-between',
   },
 
