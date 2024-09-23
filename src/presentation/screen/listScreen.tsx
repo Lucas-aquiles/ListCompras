@@ -1,140 +1,40 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TextInput,
   FlatList,
-  StyleSheet,
   Pressable,
   Dimensions,
-  Button,
-  Share,
+  StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {globalColors} from '../theme/theme';
+import {useList} from '../hooks/useList';
 import {ShareInfo} from '../components/shareInformation/shareInfo';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {globalColors} from '../theme/theme';
 
-interface Product {
-  name: string;
-  quantity: number;
-  weight: number;
-  price: number;
-}
-
-const {width, height} = Dimensions.get('window'); // Obtener dimensiones de la pantalla
+const {width, height} = Dimensions.get('window');
 
 export const ListScreen = () => {
-  const [product, setProduct] = useState<Product>({
-    name: '',
-    quantity: 0,
-    weight: 0,
-    price: 0,
-  });
+  const {
+    products,
+    product,
+    productAux,
+    total,
+    modal,
+    invisibiliti,
+    editPro,
+    addProduct,
+    editProduct,
+    handleInputChange,
+    handleInputChangeAux,
+    updateProduct,
+    deleteProduct,
+    calculateTotal,
+    setInvisibiliti,
+    setModal,
+  } = useList();
 
-  const [productAux, setProductAux] = useState<Product>({
-    name: '',
-    quantity: 0,
-    weight: 0,
-    price: 0,
-  });
-
-  const [products, setProducts] = useState<Product[]>([]);
-  const [total, setTotal] = useState(0);
-  const [modal, setModal] = useState(false);
-  const [invisibiliti, setInvisibiliti] = useState(false);
-
-  const [editPro, setEditPro] = useState({index: 0, name: ''});
-
-  const addProduct = () => {
-    const {name, quantity, weight, price} = product;
-    if (name && quantity >= 0 && weight >= 0 && price >= 0) {
-      setProducts([...products, product]);
-      setProduct({name: '', quantity: 0, weight: 0, price: 0});
-    }
-  };
-
-  const editProduct = (index: number, newName: string): void => {
-    setModal(!modal);
-    setEditPro({index, name: newName}); // Pasa un objeto con las propiedades 'index' y 'name'
-    handleInputChangeAux('name', newName);
-    // Your existing editProduct logic here
-  };
-
-  const handleInputChange = (key: keyof Product, value: string) => {
-    if (key === 'name') {
-      setProduct({...product, [key]: value}); // Si es el nombre, guardar como string
-    } else {
-      const numericValue = Number(value);
-      if (!isNaN(numericValue)) {
-        setProduct({...product, [key]: numericValue}); // Para los otros campos, guardarlo como número
-      }
-    }
-  };
-
-  const handleInputChangeAux = (key: keyof Product, value: string) => {
-    if (key === 'name') {
-      setProductAux({...productAux, [key]: value}); // Si es el nombre, guardar como string
-    } else {
-      const numericValue = Number(value);
-      if (!isNaN(numericValue)) {
-        setProductAux({...productAux, [key]: numericValue}); // Para los otros campos, guardarlo como número
-      }
-    }
-  };
-
-  const ActualizationProduct = (index: number) => {
-    const nuevoObjeto = {};
-    productAux;
-    let articulo = products[index];
-
-    const objeto3 = {...articulo};
-
-    if (productAux.price !== 0) {
-      objeto3.price = productAux.price;
-    }
-    if (productAux.quantity !== 0) {
-      objeto3.quantity = productAux.quantity;
-    }
-    if (productAux.weight !== 0) {
-      objeto3.weight = productAux.weight;
-    }
-
-    setProducts(prevProducts => {
-      const updatedProducts = [...prevProducts]; // Create a copy
-      updatedProducts[index] = objeto3;
-      return updatedProducts;
-    });
-
-    setProductAux({
-      name: '',
-      quantity: 0,
-      weight: 0,
-      price: 0,
-    });
-    setEditPro({index: 0, name: ''});
-    setModal(false);
-  };
-
-  const DeleteProduct = (index: number) => {
-    const newArray = products.filter((_, i) => i !== index);
-    setProducts(newArray);
-    setModal(false);
-  };
-  function calcularTotalCarrito() {
-    // Inicializamos una variable para almacenar el total
-    let total = 0;
-
-    // Iteramos sobre cada elemento (producto) del carrito
-    products.forEach(producto => {
-      // Calculamos el subtotal del producto (cantidad * precio)
-      const subtotal = producto.quantity * producto.price;
-
-      // Sumamos el subtotal al total general
-      total += subtotal;
-    });
-    setTotal(total);
-  }
   return (
     <View style={styles.container}>
       <Pressable
@@ -258,7 +158,7 @@ export const ListScreen = () => {
             }}>
             <Pressable
               onPress={() => {
-                ActualizationProduct(editPro.index);
+                updateProduct(editPro.index);
               }}>
               <Icon
                 name="checkmark-sharp"
@@ -269,7 +169,7 @@ export const ListScreen = () => {
 
             <Pressable
               onPress={() => {
-                DeleteProduct(editPro.index);
+                deleteProduct(editPro.index);
               }}>
               <Icon name="trash-outline" size={width * 0.09} color={'red'} />
             </Pressable>
@@ -350,11 +250,11 @@ export const ListScreen = () => {
               justifyContent: 'center',
               marginBottom: width * 0.05,
             })}
-            onPress={calcularTotalCarrito}>
+            onPress={calculateTotal}>
             <Icon
               name="bag-add-outline"
               size={width * 0.07}
-              color={Colors.secondary}
+              color={globalColors.secondary}
             />
           </Pressable>
         </View>
@@ -392,7 +292,6 @@ export const ListScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
