@@ -22,7 +22,7 @@ export const HomeScreen = () => {
           color: 'white',
           marginTop: height * 0.05,
         }}>
-        Tus Mandados
+        Mis Mandados
       </Text>
       <Image
         source={require('../../assets/images/lista1.png')}
