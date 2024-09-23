@@ -67,6 +67,7 @@ export const BottomTabNavigator = () => {
           tabBarIcon: ({color}) => (
             <Icon name="home-outline" size={40} color={color} />
           ),
+          tabBarLabel: () => null,
         }}
         component={HomeScreen}
       />
@@ -76,6 +77,7 @@ export const BottomTabNavigator = () => {
           tabBarIcon: ({color}) => (
             <Icon name="list-outline" size={40} color={color} />
           ),
+          tabBarLabel: () => null,
         }}
         component={ListScreen}
       />
@@ -86,6 +88,7 @@ export const BottomTabNavigator = () => {
           tabBarIcon: ({color}) => (
             <Icon name="settings-outline" size={40} color={color} />
           ),
+          tabBarLabel: () => null,
         }}
         component={SettingScreen}
       />

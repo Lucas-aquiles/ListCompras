@@ -84,9 +84,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.listsuper"
+    namespace "com.lucasechegaray.mismandados"
     defaultConfig {
-        applicationId "com.listsuper"
+        applicationId "com.lucasechegaray.mismandados"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

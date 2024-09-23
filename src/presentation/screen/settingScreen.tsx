@@ -25,7 +25,7 @@ export const SettingScreen = () => {
               color: 'white',
               fontSize: width * 0.06,
             }}>
-            Politicas de Privacidad
+            Políticas de Privacidad
           </Text>
         </TouchableOpacity>
       </View>

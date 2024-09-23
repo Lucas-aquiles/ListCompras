@@ -1,4 +1,4 @@
-package com.listsuper
+package com.lucasechegaray.mismandados
 
 import android.app.Application
 import com.facebook.react.PackageList
