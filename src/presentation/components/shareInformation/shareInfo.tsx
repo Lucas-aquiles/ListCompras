@@ -13,7 +13,9 @@ export const ShareInfo = ({total, products}: any) => {
   const handleShare = async () => {
     try {
       const result = await Share.share({
-        message: `Te gastaste en la compra  : ${resultado}`,
+        message: lenguage
+          ? `Te gastaste en la compra  : ${resultado}`
+          : `You spent on the purchase : ${resultado}`,
       });
 
       if (result.action === Share.sharedAction) {
