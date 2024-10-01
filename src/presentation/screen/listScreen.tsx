@@ -12,10 +12,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useList} from '../hooks/useList';
 import {ShareInfo} from '../components/shareInformation/shareInfo';
 import {globalColors} from '../theme/theme';
-
+import {Div, Input, Collapse} from 'react-native-magnus';
+import Buttoncustom from '../components/buttoncustom';
+import {useIdiomaStore} from '../../store/useIdiomaStore';
 const {width, height} = Dimensions.get('window');
-
+interface IdiomaState {
+  lenguage: boolean;
+}
 export const ListScreen = () => {
+  const lenguage = useIdiomaStore((state: IdiomaState) => state.lenguage);
+
   const {
     products,
     product,
@@ -45,7 +51,9 @@ export const ListScreen = () => {
           marginBottom: height * 0.02,
         }}
         onPress={() => setInvisibiliti(!invisibiliti)}>
-        <Text style={styles.title}>Cargar Producto</Text>
+        <Text style={styles.title}>
+          {lenguage ? 'Cargar Producto' : 'Load Product'}
+        </Text>
         {!invisibiliti && (
           <Icon name="caret-down-outline" size={20} color={'white'} />
         )}
@@ -54,50 +62,72 @@ export const ListScreen = () => {
         )}
       </Pressable>
       {invisibiliti && (
-        <View>
-          <TextInput
-            style={styles.input}
-            placeholder="Producto"
+        <Div>
+          <Input
+            h={45}
+            borderWidth={1}
+            rounded="md"
+            shadow="2xl"
+            placeholder={lenguage ? 'Producto' : 'Product'}
+            placeholderTextColor="teal900"
+            my={5}
+            fontSize={18}
+            focusBorderColor="green700"
             value={product.name}
             onChangeText={text => handleInputChange('name', text)}
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Cantidad"
+          <Input
+            h={45}
+            borderWidth={1}
+            rounded="md"
+            shadow="2xl"
+            placeholder={lenguage ? 'Cantidad' : 'Quantity'}
+            placeholderTextColor="teal900"
+            my={5}
+            fontSize={18}
+            focusBorderColor="green700"
             value={product.quantity === 0 ? '' : `${product.quantity}`}
             onChangeText={text => handleInputChange('quantity', text)}
             keyboardType="numeric"
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Peso (kg)"
+          <Input
+            h={45}
+            borderWidth={1}
+            rounded="md"
+            shadow="2xl"
+            placeholder={lenguage ? 'Peso (kg/gr)' : 'Weight'}
+            placeholderTextColor="teal900"
+            my={5}
+            fontSize={18}
+            focusBorderColor="green700"
             value={product.weight === 0 ? '' : `${product.weight}`}
             onChangeText={text => handleInputChange('weight', text)}
             keyboardType="numeric"
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Precio"
+          <Input
+            h={45}
+            borderWidth={1}
+            rounded="md"
+            shadow="2xl"
+            placeholder={lenguage ? 'Precio' : 'Price'}
+            placeholderTextColor="teal900"
+            my={5}
+            fontSize={18}
+            focusBorderColor="green700"
             value={product.price === 0 ? '' : `${product.price}`}
             onChangeText={text => handleInputChange('price', text)}
             keyboardType="numeric"
           />
 
-          <Pressable
-            onPress={addProduct}
-            style={{
-              marginHorizontal: 'auto',
-            }}>
-            <Icon name="add-circle-sharp" size={width * 0.12} color={'white'} />
-          </Pressable>
-        </View>
+          <Buttoncustom nameIcon={'add-outline'} onPress={addProduct} />
+        </Div>
       )}
       {products.length !== 0 && (
         <Text style={[styles.title, {marginTop: width * 0.05}]}>
-          Productos cargados :
+          {lenguage ? 'Productos cargados :' : 'Loaded products :'}
         </Text>
       )}
       {/* ---------------------------------------------------------------------------------- */}
@@ -112,8 +142,9 @@ export const ListScreen = () => {
           }}>
           <Text
             style={{marginLeft: width * 0.05, marginVertical: height * 0.01}}>
-            {' '}
-            Producto: {editPro.name.toUpperCase()}
+            {lenguage
+              ? `Producto: ${editPro.name.toUpperCase()}`
+              : `Product: ${editPro.name.toUpperCase()}`}
           </Text>
           <View
             style={{
@@ -123,7 +154,7 @@ export const ListScreen = () => {
             }}>
             <TextInput
               style={styles.input1}
-              placeholder="Cantidad"
+              placeholder={lenguage ? 'Cantidad' : 'Quantity'}
               placeholderTextColor="white"
               keyboardType="numeric"
               value={productAux.quantity === 0 ? '' : `${productAux.quantity}`}
@@ -131,7 +162,7 @@ export const ListScreen = () => {
             />
             <TextInput
               style={styles.input1}
-              placeholder="Peso"
+              placeholder={lenguage ? 'Peso' : 'Weight'}
               placeholderTextColor="white"
               keyboardType="numeric"
               value={productAux.weight === 0 ? '' : `${productAux.weight}`}
@@ -139,7 +170,7 @@ export const ListScreen = () => {
             />
             <TextInput
               style={styles.input1}
-              placeholder="Precio"
+              placeholder={lenguage ? 'Precio' : 'Price'}
               placeholderTextColor="white"
               keyboardType="numeric"
               value={productAux.price === 0 ? '' : `${productAux.price}`}
@@ -214,7 +245,7 @@ export const ListScreen = () => {
                 width: width * 0.16,
                 fontWeight: '600',
               }}>
-              {item.weight}kg
+              {item.weight}kg/gr
             </Text>
             <Text
               style={{
@@ -241,25 +272,9 @@ export const ListScreen = () => {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
           }}>
-          <Pressable
-            style={({pressed}) => ({
-              backgroundColor: pressed ? '#887f7f' : 'white', // Cambia de color si está presionado
-              width: width * 0.15,
-              borderRadius: 20,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: width * 0.05,
-            })}
-            onPress={calculateTotal}>
-            <Icon
-              name="bag-add-outline"
-              size={width * 0.07}
-              color={globalColors.secondary}
-            />
-          </Pressable>
+          <Buttoncustom nameIcon={'bag-add-outline'} onPress={calculateTotal} />
         </View>
       )}
-
       <View
         style={{
           backgroundColor: 'white',
@@ -269,10 +284,10 @@ export const ListScreen = () => {
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          borderRadius: 20,
+          borderRadius: 7,
           paddingHorizontal: width * 0.04,
         }}>
-        <ShareInfo total={total} />
+        <ShareInfo products={products} total={total} />
 
         <View
           style={{
@@ -284,8 +299,11 @@ export const ListScreen = () => {
             Total :
           </Text>
           <Text style={{alignSelf: 'center', fontSize: width * 0.03}}> $ </Text>
-          <Text style={{alignSelf: 'center', fontSize: width * 0.09}}>
-            {total}
+          <Text
+            adjustsFontSizeToFit
+            numberOfLines={1}
+            style={{alignSelf: 'center', fontSize: width * 0.06}}>
+            {products.length === 0 ? 0 : total}
           </Text>
         </View>
       </View>
@@ -308,7 +326,7 @@ const styles = StyleSheet.create({
     paddingVertical: width * 0.004,
     paddingHorizontal: width * 0.02,
     marginBottom: height * 0.009,
-    borderRadius: 20,
+    borderRadius: 5,
     backgroundColor: globalColors.background,
   },
   input1: {

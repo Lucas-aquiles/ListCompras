@@ -1,6 +1,12 @@
-import {Button, View, Share, Pressable, Text, Dimensions} from 'react-native';
+import {View, Share, Dimensions} from 'react-native';
+import {Button, Icon, Text} from 'react-native-magnus';
+import {useIdiomaStore} from '../../../store/useIdiomaStore';
+interface IdiomaState {
+  lenguage: boolean;
+}
+export const ShareInfo = ({total, products}: any) => {
+  const lenguage = useIdiomaStore((state: IdiomaState) => state.lenguage);
 
-export const ShareInfo = ({total}: any) => {
   const resultado = total;
   const {width, height} = Dimensions.get('window'); // Obtener dimensiones de la pantalla
 
@@ -22,24 +28,27 @@ export const ShareInfo = ({total}: any) => {
   };
 
   return (
-    <Pressable
-      style={{
-        backgroundColor: 'gray',
-        width: width * 0.3,
-        height: height * 0.07,
-        justifyContent: 'center',
-        borderRadius: 20,
-      }}
-      onPress={handleShare}>
-      <Text
-        style={{
-          color: 'white',
-          marginHorizontal: 'auto',
-          fontSize: width * 0.05,
-        }}>
-        {' '}
-        Compartir
+    <Button
+      onPress={handleShare}
+      my={'auto'}
+      py="lg"
+      bg="green700"
+      color="white"
+      underlayColor="green900"
+      shadow="sm"
+      suffix={
+        <Icon
+          name="arrow-forward-outline"
+          fontFamily="Ionicons"
+          fontSize={24}
+          color="white"
+          rounded="md"
+          ml={1}
+        />
+      }>
+      <Text color="white" fontSize="2xl" fontWeight="bold" opacity={0.9}>
+        {lenguage ? 'Compartir' : 'Share'}
       </Text>
-    </Pressable>
+    </Button>
   );
 };

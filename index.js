@@ -18,6 +18,9 @@ const theme = {
     xs: 2,
     '5xl': 64,
   },
+  colors: {
+    green1000: '#9CB783',
+  },
 };
 
 AppRegistry.registerComponent(appName, () => () => (
