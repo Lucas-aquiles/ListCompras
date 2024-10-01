@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, Image, StatusBar, Dimensions} from 'react-native';
+import {View, Image, StatusBar, Dimensions} from 'react-native';
+import {Text} from 'react-native-magnus';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalColors} from '../theme/theme';
@@ -15,13 +16,12 @@ export const HomeScreen = () => {
       />
 
       <Text
-        style={{
-          fontSize: width * 0.16,
-          textAlign: 'center',
-          fontWeight: '800',
-          color: 'white',
-          marginTop: height * 0.05,
-        }}>
+        fontSize="bigText100"
+        color="yellow100"
+        mx="auto"
+        mt="3xl"
+        fontWeight="bold"
+        letterSpacing={2}>
         Mis Mandados
       </Text>
       <Image
