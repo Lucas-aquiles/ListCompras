@@ -265,7 +265,7 @@ export const ListScreen = () => {
           </View>
         )}
       />
-      {products.length !== 0 && (
+      {products.length !== 0 && !invisibiliti && (
         <View
           style={{
             display: 'flex',
@@ -275,38 +275,43 @@ export const ListScreen = () => {
           <Buttoncustom nameIcon={'bag-add-outline'} onPress={calculateTotal} />
         </View>
       )}
-      <View
-        style={{
-          backgroundColor: 'white',
-          height: height * 0.1,
-          alignContent: 'center',
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          borderRadius: 7,
-          paddingHorizontal: width * 0.04,
-        }}>
-        <ShareInfo products={products} total={total} />
-
+      {products.length !== 0 && !invisibiliti && (
         <View
           style={{
+            backgroundColor: 'white',
+            height: height * 0.1,
+            alignContent: 'center',
+            alignItems: 'center',
             display: 'flex',
             flexDirection: 'row',
-            height: 'auto',
+            justifyContent: 'space-between',
+            borderRadius: 7,
+            paddingHorizontal: width * 0.04,
           }}>
-          <Text style={{fontSize: width * 0.05, alignSelf: 'center'}}>
-            Total :
-          </Text>
-          <Text style={{alignSelf: 'center', fontSize: width * 0.03}}> $ </Text>
-          <Text
-            adjustsFontSizeToFit
-            numberOfLines={1}
-            style={{alignSelf: 'center', fontSize: width * 0.06}}>
-            {products.length === 0 ? 0 : total}
-          </Text>
+          <ShareInfo products={products} total={total} />
+
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              height: 'auto',
+            }}>
+            <Text style={{fontSize: width * 0.05, alignSelf: 'center'}}>
+              Total :
+            </Text>
+            <Text style={{alignSelf: 'center', fontSize: width * 0.03}}>
+              {' '}
+              ${' '}
+            </Text>
+            <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={{alignSelf: 'center', fontSize: width * 0.06}}>
+              {products.length === 0 ? 0 : total}
+            </Text>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };
