@@ -281,14 +281,30 @@ export const ListScreen = () => {
               flexDirection: 'row',
               height: 'auto',
             }}>
-            <Text style={{fontSize: width * 0.05, alignSelf: 'center'}}>
+            <Text
+              style={{
+                fontSize: width * 0.05,
+                alignSelf: 'center',
+                color: globalColors.textprimary,
+              }}>
               Total :
             </Text>
-            <Text style={{alignSelf: 'center', fontSize: width * 0.03}}>$</Text>
+            <Text
+              style={{
+                alignSelf: 'center',
+                fontSize: width * 0.03,
+                color: globalColors.textprimary,
+              }}>
+              $
+            </Text>
             <Text
               adjustsFontSizeToFit
               numberOfLines={1}
-              style={{alignSelf: 'center', fontSize: width * 0.06}}>
+              style={{
+                alignSelf: 'center',
+                fontSize: width * 0.06,
+                color: globalColors.textprimary,
+              }}>
               {products.length === 0 ? 0 : total}
             </Text>
           </View>
