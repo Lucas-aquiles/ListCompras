@@ -11,7 +11,7 @@ export const useList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [product, setProduct] = useState<Product>({
     name: '',
-    quantity: 0,
+    quantity: 1,
     weight: 0,
     price: 0,
   });
@@ -34,7 +34,7 @@ export const useList = () => {
       product.price >= 0
     ) {
       setProducts([...products, product]);
-      setProduct({name: '', quantity: 0, weight: 0, price: 0});
+      setProduct({name: '', quantity: 1, weight: 0, price: 0});
     }
   };
 

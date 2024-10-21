@@ -56,8 +56,7 @@ export const BottomTabNavigator = () => {
           borderTopWidth: 0,
           elevation: 0,
           height: isKeyboardVisible ? 0 : height * 0.11, // Oculta la barra cuando el teclado está visible
-          borderTopLeftRadius: 20, // Ajusta el valor según la redondez deseada
-          borderTopRightRadius: 20,
+
           overflow: 'hidden',
         },
       }}>

@@ -82,21 +82,6 @@ export const ListScreen = () => {
             borderWidth={1}
             rounded="md"
             shadow="2xl"
-            placeholder={lenguage ? 'Cantidad' : 'Quantity'}
-            placeholderTextColor="teal900"
-            my={5}
-            fontSize={18}
-            focusBorderColor="green700"
-            value={product.quantity === 0 ? '' : `${product.quantity}`}
-            onChangeText={text => handleInputChange('quantity', text)}
-            keyboardType="numeric"
-          />
-
-          <Input
-            h={45}
-            borderWidth={1}
-            rounded="md"
-            shadow="2xl"
             placeholder={lenguage ? 'Peso (kg/gr)' : 'Weight'}
             placeholderTextColor="teal900"
             my={5}
@@ -275,7 +260,7 @@ export const ListScreen = () => {
           <Buttoncustom nameIcon={'bag-add-outline'} onPress={calculateTotal} />
         </View>
       )}
-      {products.length !== 0 && !invisibiliti && (
+      {!invisibiliti && (
         <View
           style={{
             backgroundColor: 'white',
@@ -299,10 +284,7 @@ export const ListScreen = () => {
             <Text style={{fontSize: width * 0.05, alignSelf: 'center'}}>
               Total :
             </Text>
-            <Text style={{alignSelf: 'center', fontSize: width * 0.03}}>
-              {' '}
-              ${' '}
-            </Text>
+            <Text style={{alignSelf: 'center', fontSize: width * 0.03}}>$</Text>
             <Text
               adjustsFontSizeToFit
               numberOfLines={1}
@@ -354,6 +336,6 @@ const styles = StyleSheet.create({
   },
 
   customButton: {
-    borderRadius: 10, // Ajusta el valor según el radio deseado
+    borderRadius: 10,
   },
 });
